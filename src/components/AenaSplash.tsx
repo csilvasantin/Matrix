@@ -144,12 +144,11 @@ export function AenaSplash({ onFinished }: AenaSplashProps) {
         offsetX += LETTER_W + GAP;
       }
 
-      // Subtitle "AEROPUERTOS" below logo - pixel style
-      const subText = 'AEROPUERTOS';
+      // Subtitle "AEROPUERTOS para ti" below logo - pixel style
       const subY = startY + logoH + 18;
 
       // Draw a yellow bar behind subtitle
-      const barW = 180;
+      const barW = 240;
       const barH = 16;
       const barX = (w - barW) / 2;
       const fadeIn = t < 0.3 ? 0 : Math.min(1, (t - 0.3) / 0.2);
@@ -163,11 +162,39 @@ export function AenaSplash({ onFinished }: AenaSplashProps) {
         ctx.fillRect(barX, subY - 2, barW, 2);
         ctx.fillRect(barX, subY + barH - 4, barW, 2);
 
+        // Draw green arrow pixel art logo (11x11 grid, 1px per cell)
+        const arrowGrid = [
+          0,0,0,0,0,1,0,0,0,0,0,
+          0,0,0,0,1,1,0,0,0,0,0,
+          0,0,0,1,1,1,0,0,0,0,0,
+          0,0,1,1,1,1,0,0,0,0,0,
+          0,1,1,1,1,1,1,0,0,0,0,
+          1,1,1,1,1,1,1,1,1,1,1,
+          0,1,1,1,1,1,1,0,0,0,0,
+          0,0,1,1,1,1,0,0,0,0,0,
+          0,0,0,1,1,1,0,0,0,0,0,
+          0,0,0,0,1,1,0,0,0,0,0,
+          0,0,0,0,0,1,0,0,0,0,0,
+        ];
+        const arrowPx = 1.2;
+        const arrowTotalH = 11 * arrowPx;
+        const arrowX = barX + 5;
+        const arrowY = subY + (barH - arrowTotalH) / 2 - 1;
+        for (let ay = 0; ay < 11; ay++) {
+          for (let ax = 0; ax < 11; ax++) {
+            if (arrowGrid[ay * 11 + ax]) {
+              ctx.fillStyle = `rgba(100, 160, 20, ${fadeIn})`;
+              ctx.fillRect(arrowX + ax * arrowPx, arrowY + ay * arrowPx, arrowPx, arrowPx);
+            }
+          }
+        }
+
+        // "AEROPUERTOS  para ti ✈" text
         ctx.fillStyle = `rgba(0, 0, 0, ${fadeIn})`;
         ctx.font = `${10}px "Press Start 2P", monospace`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(subText, w / 2, subY + 1);
+        ctx.fillText('AEROPUERTOS para ti', w / 2 + 6, subY + 1);
       }
 
       // Second subtitle line - appears after AEROPUERTOS
