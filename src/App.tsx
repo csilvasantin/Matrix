@@ -50,8 +50,8 @@ function App() {
     <div className="app">
       <audio ref={audioRef} src={`${import.meta.env.BASE_URL}videos/intro-music.mp3`} loop />
       <header className="app-header">
-        <h1>✈️ Aeropuerto Interactivo</h1>
-        <p className="subtitle">¿Qué avión ha llegado?</p>
+        <h1>✈️ Aena La Aventura Gráfica</h1>
+        <p className="subtitle">powered by Admira</p>
         <button className="replay-intro-btn" onClick={handleReplayIntro}>
           🎬 Ver intro
         </button>
