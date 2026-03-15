@@ -123,17 +123,8 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
   const data = countryAdsMap[country];
   if (!data) return null;
 
-  const activeIndices = data.ads.map((_, i) => i).filter(i => !disabledCTS.has(i));
-  const activeCTS = activeIndices.map(i => data.ads[i]);
   const totalCTS = data.ads.length;
-
-  // Calculate optimal grid based on active screens
-  const count = activeCTS.length;
-  let cols: number;
-  if (count <= 2) cols = count;
-  else if (count <= 4) cols = 2;
-  else if (count <= 8) cols = 4;
-  else cols = 9;
+  const count = totalCTS - disabledCTS.size;
 
   return (
     <div className="videowall">
@@ -180,72 +171,75 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
         </div>
       </div>
 
-      {/* Preset 1: Lienzo apagado — grid adaptativa en negro */}
-      {preset === 1 && (
-        <div
-          className="videowall-canvas videowall-cts videowall-off-grid"
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
-          {activeIndices.map(i => (
-            <div key={i} className="cts-screen cts-screen-off">
-              <div className="cts-header cts-header-off">
-                <span className="cts-id" style={{ color: '#444' }}>
-                  CTS-{(i + 1).toString().padStart(2, '0')}
-                </span>
-                <span className="cts-off-label">OFF</span>
-              </div>
-              <div className="cts-content cts-content-off">
-                <span className="off-icon">⏻</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Grid fija de 18 monitores — siempre 9x2 */}
+      <div
+        className={`videowall-canvas videowall-cts ${preset === 1 ? 'videowall-off-grid' : preset === 2 ? 'videowall-banner-grid' : ''}`}
+        style={{ gridTemplateColumns: 'repeat(9, 1fr)' }}
+      >
+        {data.ads.map((ad, i) => {
+          const isOff = disabledCTS.has(i);
+          const ctsLabel = `CTS-${(i + 1).toString().padStart(2, '0')}`;
 
-      {/* Preset 2: Banner — grid adaptativa con texto */}
-      {preset === 2 && (
-        <div
-          className="videowall-canvas videowall-cts videowall-banner-grid"
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
-          {activeIndices.map(i => (
-            <div key={i} className="cts-screen cts-screen-banner">
-              <div className="cts-header cts-header-banner">
-                <span className="cts-id" style={{ color: data.banner.color }}>
-                  CTS-{(i + 1).toString().padStart(2, '0')}
-                </span>
-                <span className="cts-live" style={{ color: data.banner.color }}>● LIVE</span>
-              </div>
-              <div className="cts-content cts-content-banner">
-                <div className="banner-scroll-mini" style={{ color: data.banner.color }}>
-                  <span>{data.banner.text}</span>
-                  <span>{data.banner.text}</span>
+          // Monitor apagado — igual en todos los presets
+          if (isOff) {
+            return (
+              <div key={i} className="cts-screen cts-screen-off">
+                <div className="cts-header cts-header-off">
+                  <span className="cts-id" style={{ color: '#444' }}>{ctsLabel}</span>
+                  <span className="cts-off-label">OFF</span>
+                </div>
+                <div className="cts-content cts-content-off">
+                  <span className="off-icon">⏻</span>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            );
+          }
 
-      {/* Preset 3: CTS adaptativas con contenido */}
-      {preset === 3 && (
-        <div
-          className="videowall-canvas videowall-cts"
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
-          {activeCTS.map((ad, idx) => (
+          // Preset 1: todos apagados (pero encendidos si el toggle está on)
+          if (preset === 1) {
+            return (
+              <div key={i} className="cts-screen cts-screen-off">
+                <div className="cts-header cts-header-off">
+                  <span className="cts-id" style={{ color: '#444' }}>{ctsLabel}</span>
+                  <span className="cts-off-label">OFF</span>
+                </div>
+                <div className="cts-content cts-content-off">
+                  <span className="off-icon">⏻</span>
+                </div>
+              </div>
+            );
+          }
+
+          // Preset 2: banner scrolling
+          if (preset === 2) {
+            return (
+              <div key={i} className="cts-screen cts-screen-banner">
+                <div className="cts-header cts-header-banner">
+                  <span className="cts-id" style={{ color: data.banner.color }}>{ctsLabel}</span>
+                  <span className="cts-live" style={{ color: data.banner.color }}>● LIVE</span>
+                </div>
+                <div className="cts-content cts-content-banner">
+                  <div className="banner-scroll-mini" style={{ color: data.banner.color }}>
+                    <span>{data.banner.text}</span>
+                    <span>{data.banner.text}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          // Preset 3: contenido CTS
+          return (
             <div
-              key={ad.title}
+              key={i}
               className="cts-screen"
               style={{
                 borderColor: ad.color + '60',
-                animationDelay: `${idx * 0.05}s`,
+                animationDelay: `${i * 0.05}s`,
               }}
             >
               <div className="cts-header" style={{ background: ad.color + '30' }}>
-                <span className="cts-id" style={{ color: ad.color }}>
-                  CTS-{(activeIndices[idx] + 1).toString().padStart(2, '0')}
-                </span>
+                <span className="cts-id" style={{ color: ad.color }}>{ctsLabel}</span>
                 <span className="cts-live">● LIVE</span>
               </div>
               <div className="cts-content">
@@ -254,9 +248,9 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
                 <span className="cts-subtitle">{ad.subtitle}</span>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 }
