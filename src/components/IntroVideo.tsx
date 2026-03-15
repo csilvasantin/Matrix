@@ -66,6 +66,54 @@ export function IntroVideo({ onFinished, onStartMusic, onToggleMute, muted }: In
           }}>
             Click para empezar
           </p>
+          <div style={{
+            position: 'absolute',
+            bottom: '1.2rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}>
+            <span style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '0.4rem',
+              color: '#666',
+              textTransform: 'uppercase',
+            }}>
+              powered by
+            </span>
+            {/* Pixel art green cloud (Admira logo) */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(9, 3px)',
+              gridTemplateRows: 'repeat(6, 3px)',
+              gap: '0px',
+            }}>
+              {[
+                0,0,0,1,1,1,0,0,0,
+                0,0,1,1,1,1,1,0,0,
+                0,1,1,1,1,1,1,1,0,
+                1,1,1,1,1,1,1,1,1,
+                0,1,1,1,1,1,1,1,0,
+                0,0,1,1,1,1,1,0,0,
+              ].map((v, i) => (
+                <div key={i} style={{
+                  width: 3,
+                  height: 3,
+                  background: v ? '#2cb67d' : 'transparent',
+                  boxShadow: v ? '0 0 2px #2cb67d55' : 'none',
+                }} />
+              ))}
+            </div>
+            <span style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '0.45rem',
+              color: '#2cb67d',
+              textShadow: '1px 1px 0 #0d3d26',
+              textTransform: 'uppercase',
+            }}>
+              Admira
+            </span>
+          </div>
         </div>
       )}
       {phase === 'splash' && (
