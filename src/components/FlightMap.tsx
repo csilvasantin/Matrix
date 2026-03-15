@@ -245,18 +245,10 @@ export function FlightMap({ currentNodeId }: FlightMapProps) {
     const route = ROUTES[country];
     if (!route) return;
 
-    const resize = () => {
-      const parent = canvas.parentElement;
-      if (parent) {
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-      }
-    };
-    resize();
-
-    const ro = new ResizeObserver(resize);
-    if (canvas.parentElement) ro.observe(canvas.parentElement);
-
+    const w = 480;
+    const h = 200;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext('2d')!;
     const startTime = Date.now();
 
@@ -397,24 +389,17 @@ export function FlightMap({ currentNodeId }: FlightMapProps) {
       // Keep animating as background — no auto-stop
     }, 33);
 
-    return () => {
-      clearInterval(interval);
-      ro.disconnect();
-    };
+    return () => clearInterval(interval);
   }, [country]);
 
   if (!country) return null;
 
   return (
-    <div className="flight-map-bg">
+    <div className="flight-map">
       <canvas
         ref={canvasRef}
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
           width: '100%',
-          height: '100%',
           display: 'block',
           imageRendering: 'pixelated',
         }}
