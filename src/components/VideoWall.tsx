@@ -123,7 +123,8 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
   const data = countryAdsMap[country];
   if (!data) return null;
 
-  const activeCTS = data.ads.filter((_, i) => !disabledCTS.has(i));
+  const activeIndices = data.ads.map((_, i) => i).filter(i => !disabledCTS.has(i));
+  const activeCTS = activeIndices.map(i => data.ads[i]);
   const totalCTS = data.ads.length;
 
   // Calculate optimal grid based on active screens
@@ -160,13 +161,32 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
         </div>
       </div>
 
-      {/* Preset 1: Lienzo apagado — misma grid pero en negro */}
+      {/* Toggle buttons — shared across all presets */}
+      <div className="cts-status">
+        <span className="cts-count">
+          CTS activas: {count}/{totalCTS}
+        </span>
+        <div className="cts-toggles">
+          {data.ads.map((_, i) => (
+            <button
+              key={i}
+              className={`cts-toggle ${disabledCTS.has(i) ? 'off' : 'on'}`}
+              onClick={() => toggleCTS(i)}
+              title={`CTS-${(i + 1).toString().padStart(2, '0')}`}
+            >
+              {(i + 1).toString().padStart(2, '0')}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Preset 1: Lienzo apagado — grid adaptativa en negro */}
       {preset === 1 && (
         <div
           className="videowall-canvas videowall-cts videowall-off-grid"
-          style={{ gridTemplateColumns: `repeat(9, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
         >
-          {data.ads.map((_, i) => (
+          {activeIndices.map(i => (
             <div key={i} className="cts-screen cts-screen-off">
               <div className="cts-header cts-header-off">
                 <span className="cts-id" style={{ color: '#444' }}>
@@ -182,13 +202,13 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
         </div>
       )}
 
-      {/* Preset 2: Banner en grid de 18 monitores */}
+      {/* Preset 2: Banner — grid adaptativa con texto */}
       {preset === 2 && (
         <div
           className="videowall-canvas videowall-cts videowall-banner-grid"
-          style={{ gridTemplateColumns: `repeat(9, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
         >
-          {data.ads.map((_, i) => (
+          {activeIndices.map(i => (
             <div key={i} className="cts-screen cts-screen-banner">
               <div className="cts-header cts-header-banner">
                 <span className="cts-id" style={{ color: data.banner.color }}>
@@ -207,54 +227,35 @@ export function VideoWall({ currentNodeId }: VideoWallProps) {
         </div>
       )}
 
-      {/* Preset 3: 18 CTS adaptativas */}
+      {/* Preset 3: CTS adaptativas con contenido */}
       {preset === 3 && (
-        <>
-          <div className="cts-status">
-            <span className="cts-count">
-              CTS activas: {count}/{totalCTS}
-            </span>
-            <div className="cts-toggles">
-              {data.ads.map((_, i) => (
-                <button
-                  key={i}
-                  className={`cts-toggle ${disabledCTS.has(i) ? 'off' : 'on'}`}
-                  onClick={() => toggleCTS(i)}
-                  title={`CTS-${(i + 1).toString().padStart(2, '0')}`}
-                >
-                  {(i + 1).toString().padStart(2, '0')}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div
-            className="videowall-canvas videowall-cts"
-            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-          >
-            {activeCTS.map((ad, i) => (
-              <div
-                key={ad.title}
-                className="cts-screen"
-                style={{
-                  borderColor: ad.color + '60',
-                  animationDelay: `${i * 0.05}s`,
-                }}
-              >
-                <div className="cts-header" style={{ background: ad.color + '30' }}>
-                  <span className="cts-id" style={{ color: ad.color }}>
-                    CTS-{(data.ads.indexOf(ad) + 1).toString().padStart(2, '0')}
-                  </span>
-                  <span className="cts-live">● LIVE</span>
-                </div>
-                <div className="cts-content">
-                  <div className="cts-emoji">{ad.emoji}</div>
-                  <span className="cts-title" style={{ color: ad.color }}>{ad.title}</span>
-                  <span className="cts-subtitle">{ad.subtitle}</span>
-                </div>
+        <div
+          className="videowall-canvas videowall-cts"
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+        >
+          {activeCTS.map((ad, idx) => (
+            <div
+              key={ad.title}
+              className="cts-screen"
+              style={{
+                borderColor: ad.color + '60',
+                animationDelay: `${idx * 0.05}s`,
+              }}
+            >
+              <div className="cts-header" style={{ background: ad.color + '30' }}>
+                <span className="cts-id" style={{ color: ad.color }}>
+                  CTS-{(activeIndices[idx] + 1).toString().padStart(2, '0')}
+                </span>
+                <span className="cts-live">● LIVE</span>
               </div>
-            ))}
-          </div>
-        </>
+              <div className="cts-content">
+                <div className="cts-emoji">{ad.emoji}</div>
+                <span className="cts-title" style={{ color: ad.color }}>{ad.title}</span>
+                <span className="cts-subtitle">{ad.subtitle}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
