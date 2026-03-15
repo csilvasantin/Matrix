@@ -2,6 +2,7 @@ export interface Decision {
   label: string;
   nextNodeId: string;
   timeAppear: number; // seconds into the video when this decision appears
+  gifSrc?: string; // optional animated GIF URL for the decision button
 }
 
 export interface StoryNode {
