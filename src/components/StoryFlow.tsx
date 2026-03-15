@@ -69,6 +69,8 @@ export function StoryFlow({ story }: StoryFlowProps) {
         )}
       </div>
 
+      <VideoWall currentNodeId={currentNode.id} />
+
       <FlightMap currentNodeId={currentNode.id} />
 
       <div className="video-wrapper">
@@ -89,8 +91,6 @@ export function StoryFlow({ story }: StoryFlowProps) {
       </div>
 
       <ProgressBar story={story} history={history} currentNodeId={currentNode.id} />
-
-      <VideoWall currentNodeId={currentNode.id} />
     </div>
   );
 }
