@@ -1,5 +1,7 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { AenaSplash } from './AenaSplash';
+
+type Phase = 'waiting' | 'splash' | 'video';
 
 interface IntroVideoProps {
   onFinished: () => void;
@@ -8,38 +10,19 @@ interface IntroVideoProps {
 export function IntroVideo({ onFinished }: IntroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [showSplash, setShowSplash] = useState(true);
-  const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [phase, setPhase] = useState<Phase>('waiting');
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.volume = 0.5;
-      audio.play().catch(() => {
-        // Browser blocked autoplay — need user click
-        setNeedsInteraction(true);
-      });
-    }
-    return () => {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    };
-  }, []);
-
-  const handleUserStart = () => {
-    setNeedsInteraction(false);
+  const handleStart = () => {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = 0.5;
       audio.play().catch(() => {});
     }
+    setPhase('splash');
   };
 
   const handleSplashFinished = useCallback(() => {
-    setShowSplash(false);
-    // Start video immediately after splash
+    setPhase('video');
     setTimeout(() => {
       videoRef.current?.play().catch(() => {});
     }, 100);
@@ -58,7 +41,7 @@ export function IntroVideo({ onFinished }: IntroVideoProps) {
   return (
     <div className="intro-video">
       <audio ref={audioRef} src="/videos/intro-music.mp3" loop />
-      {needsInteraction ? (
+      {phase === 'waiting' && (
         <div
           style={{
             aspectRatio: '16/9',
@@ -71,9 +54,15 @@ export function IntroVideo({ onFinished }: IntroVideoProps) {
             cursor: 'pointer',
             gap: '1rem',
           }}
-          onClick={handleUserStart}
+          onClick={handleStart}
         >
-          <div style={{ fontSize: '3rem' }}>▶</div>
+          <div style={{
+            fontSize: '3rem',
+            color: '#ff8906',
+            textShadow: '3px 3px 0 #5a2d00',
+          }}>
+            ▶
+          </div>
           <p style={{
             fontFamily: "'Press Start 2P', monospace",
             fontSize: '0.6rem',
@@ -83,11 +72,13 @@ export function IntroVideo({ onFinished }: IntroVideoProps) {
             Click para empezar
           </p>
         </div>
-      ) : showSplash ? (
+      )}
+      {phase === 'splash' && (
         <div style={{ aspectRatio: '16/9', background: '#000', width: '100%' }}>
           <AenaSplash onFinished={handleSplashFinished} />
         </div>
-      ) : (
+      )}
+      {phase === 'video' && (
         <video
           ref={videoRef}
           src="/videos/intro.mp4"
