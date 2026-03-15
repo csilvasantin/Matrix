@@ -56,46 +56,49 @@ body {
 
 .app-header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 1rem;
   border: var(--pixel) solid var(--accent);
   box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
   background: var(--bg-secondary);
+  position: relative;
 }
 
 .app-header h1 {
   font-size: 1.2rem;
   color: var(--accent);
   text-shadow: 2px 2px 0 #5a2d00;
-  line-height: 1.8;
+  line-height: 1.6;
 }
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 0.55rem;
-  margin-top: 0.5rem;
+  font-size: 0.5rem;
+  margin-top: 0.2rem;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
 .replay-intro-btn {
-  margin-top: 0.3rem;
+  position: absolute;
+  top: 6px;
+  right: 6px;
   background: var(--bg-card);
   border: 2px solid var(--accent2);
   color: var(--accent2);
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.4rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.35rem;
   cursor: pointer;
   transition: all 0.1s;
-  box-shadow: 3px 3px 0 var(--pixel-shadow);
+  box-shadow: 2px 2px 0 var(--pixel-shadow);
   text-transform: uppercase;
 }
 
 .replay-intro-btn:hover {
   background: var(--accent2);
   color: var(--bg-primary);
-  transform: translate(2px, 2px);
+  transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--pixel-shadow);
 }
 
