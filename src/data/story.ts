@@ -1,60 +1,61 @@
 import type { StoryGraph } from '../types';
 
-// 9 Mallorca activity decisions with animated GIFs
+// 9 Mallorca activity decisions with real images
+const basePath = import.meta.env.BASE_URL;
 const mallorcaDecisions = [
   {
     label: 'Playa de Palma',
     nextNodeId: 'mall_playa',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/3o7btQ8jDTPGDpgc6I/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/playa-palma.jpg`,
   },
   {
     label: 'Catedral La Seu',
     nextNodeId: 'mall_catedral',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/catedral-seu.jpg`,
   },
   {
     label: 'Castillo Bellver',
     nextNodeId: 'mall_bellver',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/castillo-bellver.jpg`,
   },
   {
     label: 'Tren de Soller',
     nextNodeId: 'mall_soller',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/l2JhN2mPMbTMnMKPu/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/tren-soller.jpg`,
   },
   {
     label: 'Serra Tramuntana',
     nextNodeId: 'mall_serra',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/serra-tramuntana.jpg`,
   },
   {
     label: 'Cuevas del Drach',
     nextNodeId: 'mall_drach',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/cuevas-drach.jpg`,
   },
   {
     label: 'Valldemossa',
     nextNodeId: 'mall_valldemossa',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/l3q2LH45XElELRzRm/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/valldemossa.jpg`,
   },
   {
     label: 'Es Trenc',
     nextNodeId: 'mall_trenc',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/l0MYunAI4j10uWbFm/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/es-trenc.jpg`,
   },
   {
     label: 'Puerto Portals',
     nextNodeId: 'mall_portals',
     timeAppear: 1,
-    gifSrc: 'https://media.giphy.com/media/3ohzdIuqJoo8QdKlnW/giphy.gif',
+    gifSrc: `${basePath}images/mallorca/puerto-portals.jpg`,
   },
 ];
 
