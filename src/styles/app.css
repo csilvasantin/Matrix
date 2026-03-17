@@ -80,15 +80,14 @@ body {
 }
 
 .replay-intro-btn {
-  position: absolute;
-  top: 6px;
-  right: 6px;
+  display: block;
+  margin: 0.5rem auto 1rem;
   background: var(--bg-card);
   border: 2px solid var(--accent2);
   color: var(--accent2);
-  padding: 0.15rem 0.4rem;
+  padding: 0.25rem 0.6rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
+  font-size: 0.4rem;
   cursor: pointer;
   transition: all 0.1s;
   box-shadow: 2px 2px 0 var(--pixel-shadow);
