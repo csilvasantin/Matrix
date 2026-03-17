@@ -1,5 +1,5 @@
-/* Pixel Art Font */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Matrix Font — monospace terminal style */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
 
 /* Reset & Base */
 *,
@@ -11,26 +11,61 @@
 }
 
 :root {
-  --bg-primary: #0f0e17;
-  --bg-secondary: #1a1930;
-  --bg-card: #232144;
-  --text-primary: #fffffe;
-  --text-secondary: #a7a9be;
-  --accent: #ff8906;
-  --accent2: #e53170;
-  --accent3: #2cb67d;
-  --pixel-border: #3d3b6e;
-  --pixel-shadow: #0a0918;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #0d1a0d;
+  --text-primary: #00ff41;
+  --text-secondary: #008f11;
+  --accent: #00ff41;
+  --accent2: #39ff14;
+  --accent3: #00ff41;
+  --pixel-border: #003b00;
+  --pixel-shadow: #001a00;
   --pixel: 4px;
+  --matrix-glow: 0 0 10px rgba(0, 255, 65, 0.3);
+  --matrix-glow-strong: 0 0 20px rgba(0, 255, 65, 0.5), 0 0 40px rgba(0, 255, 65, 0.2);
 }
 
 body {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Share Tech Mono', 'Press Start 2P', monospace;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  image-rendering: pixelated;
+  position: relative;
+}
+
+/* Matrix digital rain canvas overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 65, 0.015) 2px,
+      rgba(0, 255, 65, 0.015) 4px
+    );
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* CRT scanline effect */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.15) 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 
 /* Pixel border utility */
@@ -38,8 +73,7 @@ body {
   border: var(--pixel) solid var(--pixel-border);
   box-shadow:
     var(--pixel) var(--pixel) 0 var(--pixel-shadow),
-    calc(var(--pixel) * -1) 0 0 var(--pixel-shadow),
-    0 calc(var(--pixel) * -1) 0 var(--pixel-shadow);
+    var(--matrix-glow);
 }
 
 /* App Layout */
@@ -59,15 +93,38 @@ body {
   margin-bottom: 0.8rem;
   padding: 0.5rem 1rem;
   border: var(--pixel) solid var(--accent);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
   background: var(--bg-secondary);
   position: relative;
+  overflow: hidden;
+}
+
+/* Animated matrix code rain on header */
+.app-header::before {
+  content: '01001101 01000001 01010100 01010010 01001001 01011000 00100000';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  color: rgba(0, 255, 65, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
+  animation: matrix-scroll 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes matrix-scroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
 }
 
 .app-header h1 {
+  font-family: 'Press Start 2P', monospace;
   font-size: 1.2rem;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #5a2d00;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.8), 0 0 20px rgba(0, 255, 65, 0.4), 0 0 40px rgba(0, 255, 65, 0.2);
   line-height: 1.6;
 }
 
@@ -75,7 +132,7 @@ body {
   color: var(--text-secondary);
   font-size: 0.5rem;
   margin-top: 0.2rem;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   text-transform: uppercase;
 }
 
@@ -83,22 +140,22 @@ body {
   display: inline-block;
   margin-top: 0.3rem;
   background: var(--bg-card);
-  border: 2px solid var(--accent2);
-  color: var(--accent2);
+  border: 2px solid var(--accent);
+  color: var(--accent);
   padding: 0.15rem 0.4rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
   cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 2px 2px 0 var(--pixel-shadow);
+  transition: all 0.15s;
+  box-shadow: 2px 2px 0 var(--pixel-shadow), var(--matrix-glow);
   text-transform: uppercase;
 }
 
 .replay-intro-btn:hover {
-  background: var(--accent2);
+  background: var(--accent);
   color: var(--bg-primary);
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: 1px 1px 0 var(--pixel-shadow), var(--matrix-glow-strong);
 }
 
 /* Story Flow */
@@ -110,7 +167,7 @@ body {
 
 .flight-map {
   border: var(--pixel) solid var(--pixel-border);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
   overflow: hidden;
 }
 
@@ -118,14 +175,15 @@ body {
 .airport-globe {
   position: relative;
   border: var(--pixel) solid var(--accent);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
-  background: #1a1030;
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
+  background: #000;
   overflow: hidden;
 }
 
 .globe-canvas {
   width: 100%;
   display: block;
+  filter: hue-rotate(90deg) saturate(2) brightness(0.8);
 }
 
 .globe-overlay {
@@ -142,11 +200,11 @@ body {
 .globe-title {
   font-size: 0.8rem;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #000, 0 0 10px #ff880066;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.9), 0 0 30px rgba(0, 255, 65, 0.5);
   text-transform: uppercase;
 }
 
-/* Flight choice buttons overlaid on globe */
+/* Flight choice buttons */
 .airport-globe-wrapper {
   position: relative;
 }
@@ -162,15 +220,15 @@ body {
 }
 
 .flight-choice-btn {
-  background: rgba(15, 14, 23, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   border: 2px solid var(--accent);
-  color: var(--text-primary);
+  color: var(--accent);
   padding: 0.3rem 0.6rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
   cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 3px 3px 0 var(--pixel-shadow);
+  transition: all 0.15s;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -179,13 +237,13 @@ body {
   background: var(--accent);
   color: var(--bg-primary);
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 .globe-subtitle {
   font-size: 0.5rem;
-  color: #66ccff;
-  text-shadow: 1px 1px 0 #000;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
   margin-top: 0.3rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -198,13 +256,13 @@ body {
   padding: 0.6rem 0.8rem;
   background: var(--bg-secondary);
   border: var(--pixel) solid var(--pixel-border);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
 }
 
 .scene-title {
   font-size: 0.7rem;
-  color: var(--accent3);
-  text-shadow: 2px 2px 0 #0d3d26;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
 }
 
 .back-btn {
@@ -212,10 +270,10 @@ body {
   border: 3px solid var(--text-secondary);
   color: var(--text-secondary);
   padding: 0.4rem 0.8rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
   box-shadow: 3px 3px 0 var(--pixel-shadow);
 }
 
@@ -223,7 +281,7 @@ body {
   background: var(--text-secondary);
   color: var(--bg-primary);
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: 1px 1px 0 var(--pixel-shadow), var(--matrix-glow);
 }
 
 /* Video */
@@ -234,7 +292,7 @@ body {
   aspect-ratio: 21 / 9;
   border: var(--pixel) solid var(--pixel-border);
   min-height: 280px;
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
 }
 
 .video-container {
@@ -251,6 +309,8 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  filter: saturate(0.3) brightness(0.9);
+  mix-blend-mode: screen;
 }
 
 .video-loading {
@@ -273,6 +333,7 @@ body {
   border: 4px solid var(--pixel-border);
   border-top-color: var(--accent);
   animation: spin 0.6s steps(8) infinite;
+  box-shadow: var(--matrix-glow);
 }
 
 @keyframes spin {
@@ -288,11 +349,16 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: 0.6rem;
-  background: rgba(15, 14, 23, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   z-index: 10;
-  animation: pixelFadeIn 0.3s steps(5);
+  animation: matrixFadeIn 0.5s ease-out;
   overflow-y: auto;
   padding: 0.8rem 1.5rem;
+}
+
+@keyframes matrixFadeIn {
+  from { opacity: 0; filter: blur(4px); }
+  to { opacity: 1; filter: blur(0); }
 }
 
 @keyframes pixelFadeIn {
@@ -303,10 +369,11 @@ body {
 .decision-prompt {
   font-size: 0.55rem;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #5a2d00;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.8);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   margin: 0;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .decision-buttons {
@@ -325,17 +392,17 @@ body {
 }
 
 .decision-btn {
-  background: var(--bg-card);
+  background: rgba(0, 20, 0, 0.9);
   border: 2px solid var(--accent);
-  color: var(--text-primary);
+  color: var(--accent);
   padding: 0.2rem 0.3rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
   cursor: pointer;
   transition: all 0.15s;
-  animation: pixelSlideUp 0.3s steps(5) both;
+  animation: matrixSlideUp 0.4s ease-out both;
   text-align: center;
-  box-shadow: 2px 2px 0 var(--pixel-shadow);
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
   line-height: 1.4;
 }
 
@@ -347,7 +414,7 @@ body {
   gap: 0.3rem;
   padding: 0.4rem;
   border: 3px solid var(--accent);
-  box-shadow: 3px 3px 0 var(--pixel-shadow);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
   overflow: hidden;
 }
 
@@ -369,24 +436,26 @@ body {
 }
 
 .decision-label {
-  font-size: 0.45rem;
+  font-size: 0.65rem;
   line-height: 1.3;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .decision-btn-gif .decision-label {
-  font-size: 0.45rem;
+  font-size: 0.65rem;
 }
 
-@keyframes pixelSlideUp {
+@keyframes matrixSlideUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(20px);
+    filter: blur(2px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
 
@@ -394,12 +463,13 @@ body {
   background: var(--accent);
   color: var(--bg-primary);
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 .decision-btn-gif:hover {
   border-color: #fff;
   transform: translate(2px, 2px) scale(1.02);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 .decision-btn-gif:hover .decision-gif-wrapper {
@@ -440,8 +510,8 @@ body {
 }
 
 .progress-dot.active {
-  background: var(--accent3);
-  box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent3);
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent), var(--matrix-glow);
 }
 
 .progress-label {
@@ -453,7 +523,8 @@ body {
 .progress-connector {
   width: 16px;
   height: 3px;
-  background: var(--accent3);
+  background: var(--accent);
+  box-shadow: var(--matrix-glow);
 }
 
 .progress-track {
@@ -464,8 +535,9 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: var(--accent3);
+  background: var(--accent);
   transition: width 0.3s steps(10);
+  box-shadow: var(--matrix-glow);
 }
 
 /* End Screen */
@@ -474,14 +546,15 @@ body {
   padding: 2rem 1.5rem;
   background: var(--bg-secondary);
   border: var(--pixel) solid var(--accent);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
-  animation: pixelFadeIn 0.4s steps(5);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
+  animation: matrixFadeIn 0.5s ease-out;
 }
 
 .end-title {
   font-size: 1rem;
-  color: #ffd700;
-  text-shadow: 2px 2px 0 #6b5900;
+  font-family: 'Press Start 2P', monospace;
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4);
   margin-bottom: 0.8rem;
 }
 
@@ -492,11 +565,12 @@ body {
 }
 
 .journey-recap {
-  background: var(--bg-card);
+  background: rgba(0, 20, 0, 0.6);
   border: 3px solid var(--pixel-border);
   padding: 1rem;
   margin-bottom: 1.5rem;
   text-align: left;
+  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.05);
 }
 
 .journey-recap h3 {
@@ -504,6 +578,8 @@ body {
   color: var(--accent);
   margin-bottom: 0.8rem;
   text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  font-family: 'Press Start 2P', monospace;
 }
 
 .journey-steps {
@@ -521,7 +597,7 @@ body {
 }
 
 .step-node {
-  color: var(--accent3);
+  color: var(--accent);
 }
 
 .step-arrow {
@@ -533,34 +609,39 @@ body {
 }
 
 .step-badge {
-  background: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
+  background: rgba(0, 255, 65, 0.15);
+  color: var(--accent);
   padding: 0.2rem 0.5rem;
-  border: 2px solid #ffd700;
+  border: 2px solid var(--accent);
   font-size: 0.4rem;
   margin-left: 0.3rem;
+  box-shadow: var(--matrix-glow);
 }
 
 .journey-step.final .step-node {
-  color: #ffd700;
+  color: var(--accent);
+  text-shadow: var(--matrix-glow);
 }
 
 .restart-btn {
-  background: var(--accent2);
-  border: 3px solid #ff5f96;
-  color: white;
+  background: rgba(0, 20, 0, 0.8);
+  border: 3px solid var(--accent);
+  color: var(--accent);
   padding: 0.8rem 2rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 4px 4px 0 var(--pixel-shadow);
+  transition: all 0.15s;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
   text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .restart-btn:hover {
+  background: var(--accent);
+  color: #000;
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 /* Intro Video */
@@ -571,7 +652,7 @@ body {
   margin: 0 auto;
   overflow: hidden;
   border: var(--pixel) solid var(--accent);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
 }
 
 .intro-video video {
@@ -584,16 +665,16 @@ body {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-  background: var(--bg-card);
-  border: 3px solid var(--text-secondary);
-  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid var(--accent);
+  color: var(--accent);
   padding: 0.5rem 1rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
   z-index: 10;
-  box-shadow: 3px 3px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow);
   text-transform: uppercase;
 }
 
@@ -602,7 +683,7 @@ body {
   position: fixed;
   bottom: 1rem;
   left: 1rem;
-  background: var(--bg-card);
+  background: rgba(0, 0, 0, 0.9);
   border: 3px solid var(--pixel-border);
   color: var(--text-primary);
   padding: 0.4rem 0.5rem;
@@ -610,14 +691,14 @@ body {
   cursor: pointer;
   z-index: 100;
   box-shadow: 3px 3px 0 var(--pixel-shadow);
-  transition: all 0.1s;
+  transition: all 0.15s;
   line-height: 1;
 }
 
 .mute-btn:hover {
   border-color: var(--accent);
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: 1px 1px 0 var(--pixel-shadow), var(--matrix-glow);
 }
 
 .intro-mute {
@@ -627,17 +708,17 @@ body {
 }
 
 .skip-btn:hover {
-  background: var(--text-secondary);
-  color: var(--bg-primary);
+  background: var(--accent);
+  color: #000;
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 /* VideoWall */
 .videowall {
   margin-top: 0.5rem;
   border: var(--pixel) solid var(--pixel-border);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow);
   padding: 0.8rem;
   background: var(--bg-secondary);
 }
@@ -655,7 +736,8 @@ body {
   font-size: 0.55rem;
   color: var(--accent);
   text-transform: uppercase;
-  text-shadow: 1px 1px 0 #5a2d00;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  font-family: 'Press Start 2P', monospace;
 }
 
 .preset-buttons {
@@ -668,10 +750,10 @@ body {
   border: 2px solid var(--pixel-border);
   color: var(--text-secondary);
   padding: 0.25rem 0.5rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
   box-shadow: 2px 2px 0 var(--pixel-shadow);
 }
 
@@ -682,8 +764,9 @@ body {
 
 .preset-btn.active {
   background: var(--accent);
-  color: var(--bg-primary);
+  color: #000;
   border-color: var(--accent);
+  box-shadow: var(--matrix-glow);
 }
 
 /* Shared canvas area */
@@ -696,18 +779,18 @@ body {
 
 /* Preset 1: Off — grid of black screens */
 .videowall-off-grid .cts-screen-off {
-  background: #0a0a0a;
-  border-color: #222 !important;
+  background: #050505;
+  border-color: #111 !important;
 }
 
 .videowall-off-grid .cts-header-off {
-  background: #111 !important;
+  background: #080808 !important;
 }
 
 .videowall-off-grid .cts-off-label {
   font-size: 0.35rem;
-  color: #552222;
-  font-family: 'Press Start 2P', monospace;
+  color: #1a3a1a;
+  font-family: 'Share Tech Mono', monospace;
 }
 
 .videowall-off-grid .cts-content-off {
@@ -719,17 +802,17 @@ body {
 
 .videowall-off-grid .off-icon {
   font-size: 1.2rem;
-  color: #333;
+  color: #0a200a;
 }
 
 /* Preset 2: Banner grid */
 .videowall-banner-grid .cts-screen-banner {
-  background: #111;
-  border-color: #333 !important;
+  background: #050505;
+  border-color: #0a3a0a !important;
 }
 
 .videowall-banner-grid .cts-header-banner {
-  background: #1a1a1a !important;
+  background: #0a0a0a !important;
 }
 
 .videowall-banner-grid .cts-content-banner {
@@ -747,7 +830,9 @@ body {
   font-weight: bold;
   text-transform: uppercase;
   animation: bannerScroll 10s linear infinite;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  color: var(--accent) !important;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
 }
 
 @keyframes bannerScroll {
@@ -767,7 +852,8 @@ body {
 
 .cts-count {
   font-size: 0.4rem;
-  color: var(--accent3);
+  color: var(--accent);
+  font-family: 'Press Start 2P', monospace;
 }
 
 .cts-toggles {
@@ -780,25 +866,26 @@ body {
   width: 20px;
   height: 16px;
   border: 1px solid var(--pixel-border);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.25rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.4rem;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
   padding: 0;
   line-height: 16px;
   text-align: center;
 }
 
 .cts-toggle.on {
-  background: var(--accent3);
+  background: var(--accent);
   color: #000;
-  border-color: var(--accent3);
+  border-color: var(--accent);
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
 }
 
 .cts-toggle.off {
-  background: #1a1a2e;
-  color: #444;
-  border-color: #333;
+  background: #050505;
+  color: #0a3a0a;
+  border-color: #0a200a;
 }
 
 .cts-toggle:hover {
@@ -809,7 +896,7 @@ body {
 .videowall-cts {
   display: grid;
   gap: 4px;
-  background: #111;
+  background: #000;
   padding: 4px;
   transition: all 0.3s ease;
 }
@@ -819,7 +906,7 @@ body {
   border: 2px solid var(--pixel-border);
   display: flex;
   flex-direction: column;
-  animation: pixelFadeIn 0.2s steps(3) both;
+  animation: matrixFadeIn 0.3s ease-out both;
   min-height: 70px;
   overflow: hidden;
 }
@@ -835,12 +922,18 @@ body {
 .cts-id {
   font-size: 0.3rem;
   font-weight: bold;
+  color: var(--accent) !important;
 }
 
 .cts-live {
   font-size: 0.25rem;
-  color: #4caf50;
-  animation: blink 1s steps(1) infinite;
+  color: var(--accent) !important;
+  animation: matrixBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes matrixBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
 }
 
 @keyframes blink {
@@ -869,6 +962,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  color: var(--accent);
 }
 
 .cts-subtitle {
@@ -878,22 +972,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-}
-
-/* Scanline effect on body */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
-  );
-  pointer-events: none;
-  z-index: 9999;
 }
 
 /* Password Gate */
@@ -909,12 +987,12 @@ body::after {
 .password-box {
   background: var(--bg-secondary);
   border: var(--pixel) solid var(--accent);
-  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--pixel-shadow), var(--matrix-glow-strong);
   padding: 2.5rem 2rem;
   text-align: center;
   max-width: 400px;
   width: 100%;
-  animation: pixelFadeIn 0.4s steps(5);
+  animation: matrixFadeIn 0.5s ease-out;
 }
 
 .lock-icon {
@@ -933,9 +1011,10 @@ body::after {
 .password-title {
   font-size: 0.8rem;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #5a2d00;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.8);
   margin-bottom: 0.5rem;
   text-transform: uppercase;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .password-subtitle {
@@ -943,7 +1022,7 @@ body::after {
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .password-form {
@@ -954,26 +1033,27 @@ body::after {
 }
 
 .password-input {
-  background: var(--bg-card);
+  background: rgba(0, 20, 0, 0.8);
   border: 3px solid var(--pixel-border);
-  color: var(--text-primary);
+  color: var(--accent);
   padding: 0.6rem 0.8rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
   text-align: center;
   width: 100%;
   outline: none;
-  box-shadow: inset 2px 2px 0 var(--pixel-shadow);
+  box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
   transition: border-color 0.15s;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
 }
 
 .password-input:focus {
   border-color: var(--accent);
+  box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.2), var(--matrix-glow);
 }
 
 .password-input.password-error {
-  border-color: var(--accent2);
+  border-color: #ff0040;
   animation: shake 0.3s steps(5);
 }
 
@@ -985,21 +1065,22 @@ body::after {
 
 .password-btn {
   background: var(--accent);
-  border: 3px solid #ffab40;
-  color: var(--bg-primary);
+  border: 3px solid #39ff14;
+  color: #000;
   padding: 0.6rem 2rem;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 4px 4px 0 var(--pixel-shadow);
+  transition: all 0.15s;
+  box-shadow: var(--matrix-glow);
   text-transform: uppercase;
   width: 100%;
+  letter-spacing: 2px;
 }
 
 .password-btn:hover:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--pixel-shadow);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 .password-btn:disabled {
@@ -1010,25 +1091,25 @@ body::after {
 .password-error-msg {
   margin-top: 0.8rem;
   font-size: 0.4rem;
-  color: var(--accent2);
+  color: #ff0040;
   text-transform: uppercase;
-  animation: pixelFadeIn 0.2s steps(3);
+  animation: matrixFadeIn 0.3s ease-out;
 }
 
 .password-footer {
   margin-top: 2rem;
   font-size: 0.35rem;
-  color: #444;
+  color: #0a3a0a;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
 .password-footer span:first-child {
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .password-footer span:last-child {
-  color: var(--accent3);
+  color: var(--accent);
 }
 
 /* Responsive */
@@ -1096,7 +1177,7 @@ body::after {
   left: 0;
   right: 0;
   padding: 0.4rem 0.3rem 0.25rem;
-  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1107,14 +1188,17 @@ body::after {
   font-size: 0.55rem;
   font-weight: 700;
   line-height: 1.1;
+  color: var(--accent) !important;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6) !important;
 }
 
 .cts-image-overlay .cts-subtitle {
   font-size: 0.4rem;
   line-height: 1.1;
+  color: var(--text-secondary) !important;
 }
 
-/* === CTS Mosaic Mode (P2 with excursion selected) === */
+/* === CTS Mosaic Mode === */
 .cts-screen-mosaic {
   overflow: hidden;
 }
@@ -1140,10 +1224,11 @@ body::after {
   width: 100%;
   max-width: 800px;
   margin: 0 auto 1rem;
-  border: 2px solid #ff8c00;
-  border-radius: 4px;
+  border: 2px solid var(--accent);
+  border-radius: 0;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  box-shadow: var(--matrix-glow);
 }
 
 .excursion-video {
@@ -1159,20 +1244,18 @@ body::after {
   left: 0;
   right: 0;
   padding: 1.5rem 1rem 1rem;
-  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
   pointer-events: none;
 }
 
 .excursion-video-title {
   font-family: 'Press Start 2P', monospace;
   font-size: 1.2rem;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.8), 0 2px 8px rgba(0,0,0,0.9);
   margin: 0;
   text-align: center;
 }
-
-
 
 /* === Explorer Walking Animation === */
 .explorer-header {
@@ -1183,21 +1266,21 @@ body::after {
 .explorer-walker {
   position: absolute;
   bottom: 2px;
-  /* Walk between just after "Palma" text and before "Volver" button */
   left: 40%;
   right: 20%;
-  height: 34px;
+  height: 24px;
   pointer-events: none;
   overflow: hidden;
 }
 
 .explorer-sprite {
-  width: 22px;
-  height: 34px;
-  background-size: 44px 34px;
+  width: 15px;
+  height: 24px;
+  background-size: 30px 24px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: absolute;
+  filter: brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(85deg);
   animation:
     explorer-walk-bounce 8s linear infinite,
     explorer-step 0.35s steps(1) infinite;
@@ -1205,39 +1288,40 @@ body::after {
 
 @keyframes explorer-walk-bounce {
   0%   { left: 0; transform: scaleX(1); }
-  45%  { left: calc(100% - 22px); transform: scaleX(1); }
-  50%  { left: calc(100% - 22px); transform: scaleX(-1); }
+  45%  { left: calc(100% - 15px); transform: scaleX(1); }
+  50%  { left: calc(100% - 15px); transform: scaleX(-1); }
   95%  { left: 0; transform: scaleX(-1); }
   100% { left: 0; transform: scaleX(1); }
 }
 
 @keyframes explorer-step {
   0%  { background-position: 0 0; }
-  50% { background-position: -22px 0; }
+  50% { background-position: -15px 0; }
 }
 
-/* === Indiana Jones Banner === */
+/* === Indiana Jones Banner (Matrix style) === */
 .indy-banner-wrapper {
   width: 100%;
   max-width: 800px;
   margin: 1.5rem auto 0;
   cursor: pointer;
   position: relative;
-  border: 2px solid #ff8c00;
-  border-radius: 4px;
+  border: 2px solid var(--accent);
+  border-radius: 0;
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--matrix-glow);
 }
 
 .indy-banner-wrapper:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(255,140,0,0.5);
+  box-shadow: var(--matrix-glow-strong);
 }
 
 .indy-banner {
   width: 100%;
   display: block;
-  image-rendering: pixelated;
+  filter: hue-rotate(70deg) saturate(1.5);
 }
 
 .indy-banner-cta {
@@ -1245,18 +1329,23 @@ body::after {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
   padding: 0.8rem;
   text-align: center;
 }
 
 .indy-banner-cta span {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.9rem;
-  color: #FFD700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-  letter-spacing: 2px;
-  animation: indy-pulse 2s ease-in-out infinite;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.8);
+  letter-spacing: 3px;
+  animation: matrixPulse 2s ease-in-out infinite;
+}
+
+@keyframes matrixPulse {
+  0%, 100% { opacity: 1; text-shadow: 0 0 15px rgba(0, 255, 65, 0.8); }
+  50% { opacity: 0.7; text-shadow: 0 0 30px rgba(0, 255, 65, 1); }
 }
 
 @keyframes indy-pulse {
